@@ -16,7 +16,7 @@ public class MainCategoryService {
     private MainCategoryRepository repository;
 
     public MainCategory save(String name, MultipartFile pic, Boolean status) throws Exception {
-        File uploadFolder = new File(System.getProperty("user.dir"), "uploads");
+        File uploadFolder = new File(System.getProperty("user.dir"), "uploads/maincategory");
         if (!uploadFolder.exists()) {
             uploadFolder.mkdirs();
         }
@@ -37,7 +37,11 @@ public class MainCategoryService {
 
     }
     public List<MainCategory> getAll() {
+
         return repository.findAll();
+    }
+    public List<MainCategory> getActive(){
+        return repository.findByStatusTrue();
     }
     // Delete
     public void delete(Long id) {
@@ -52,7 +56,7 @@ public class MainCategoryService {
         if (name != null && !name.trim().isEmpty()) {
             category.setName(name);
         }
-        File uploadFolder = new File(System.getProperty("user.dir"), "uploads");
+        File uploadFolder = new File(System.getProperty("user.dir"), "uploads/maincategory");
 
         if (!uploadFolder.exists()) {
             uploadFolder.mkdirs();

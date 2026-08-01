@@ -21,7 +21,12 @@ public class BrandController {
     }
     @GetMapping
     public List<Brand> getAll(){
+
         return service.getAll();
+    }
+    @GetMapping("/active")
+    public List<Brand> getActiveBrand(){
+        return service.getActive();
     }
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id){

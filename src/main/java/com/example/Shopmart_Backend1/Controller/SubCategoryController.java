@@ -24,6 +24,10 @@ public class SubCategoryController {
     public List<SubCategory> getAll(){
         return service.getAll();
     }
+    @GetMapping("/active")
+    public List<SubCategory> getActiveSubCategory(){
+        return service.getActive();
+    }
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id){
 

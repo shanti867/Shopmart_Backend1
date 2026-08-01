@@ -15,7 +15,7 @@ public class BrandService {
     @Autowired
     private BrandRepository repository;
     public Brand save(String name, MultipartFile pic, Boolean status)throws Exception{
-        File uploadFolder = new File(System.getProperty("user.dir"), "uploads");
+        File uploadFolder = new File(System.getProperty("user.dir"), "uploads/brand");
         if(!uploadFolder.exists()){
             uploadFolder.mkdirs();
         }
@@ -34,7 +34,11 @@ public class BrandService {
         return repository.save(savedBrand);
     }
     public List<Brand> getAll(){
+
         return repository.findAll();
+    }
+    public List<Brand> getActive(){
+        return repository.findByStatusTrue();
     }
     public void delete(Long id){
         repository.deleteById(id);
@@ -45,7 +49,7 @@ public class BrandService {
         if(name != null && !name.trim().isEmpty()){
             brand.setName(name);
         }
-        File uploadFolder = new File(System.getProperty("user.dir"), "uploads");
+        File uploadFolder = new File(System.getProperty("user.dir"), "uploads/brand");
         if(!uploadFolder.exists()){
             uploadFolder.mkdir();
         }

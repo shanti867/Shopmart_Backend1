@@ -15,7 +15,7 @@ public class SubCategoryService {
     private SubCategoryRepository repository;
 
     public SubCategory save(String name, MultipartFile pic, Boolean status)throws Exception{
-        File uploadFolder = new File(System.getProperty("user.dir"),"uploads");
+        File uploadFolder = new File(System.getProperty("user.dir"),"uploads/subcategory");
 
         if(!uploadFolder.exists()){
             uploadFolder.mkdirs();
@@ -36,8 +36,10 @@ public class SubCategoryService {
     public List<SubCategory> getAll(){
         return repository.findAll();
     }
+    public List<SubCategory> getActive(){
+        return repository.findByStatusTrue();
+    }
     public void delete(Long id){
-
         repository.deleteById(id);
     }
     public SubCategory update(Long id, String name, MultipartFile pic, Boolean status)throws Exception{
@@ -46,7 +48,7 @@ public class SubCategoryService {
         if(name != null && !name.trim().isEmpty()){
             category.setName(name);
         }
-        File uploadFolder = new File(System.getProperty("user.dir"),"uploads");
+        File uploadFolder = new File(System.getProperty("user.dir"),"uploads/subcategory");
         if(!uploadFolder.exists()){
             uploadFolder.mkdirs();
         }

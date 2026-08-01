@@ -30,8 +30,13 @@ public class MainCategoryController {
 
         return service.getAll();
     }
+    @GetMapping("/active")
+    public List<MainCategory> getActiveMainCategory(){
+        return service.getActive();
+    }
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
+
         service.delete(id);
     }
     @PutMapping("/{id}")
