@@ -8,4 +8,6 @@ import java.util.List;
 public interface ProductService {
     public Product save(ProductRequest request)throws Exception;
     public List<Product> getAllProducts();
+    public Product update(Long id, ProductRequest request)throws Exception;
+    public void delete(Long id);
 }

@@ -21,6 +21,15 @@ public class ProductController {
     }
     @GetMapping
     public List<Product> getProducts(){
+
         return service.getAllProducts();
+    }
+    @PutMapping("/{id}")
+    public Product updateproduct(@PathVariable  Long id, @ModelAttribute ProductRequest request)throws Exception{
+        return service.update(id, request);
+    }
+    @DeleteMapping("/{id}")
+    public void deleteproduct(@PathVariable Long id){
+        service.delete(id);
     }
 }

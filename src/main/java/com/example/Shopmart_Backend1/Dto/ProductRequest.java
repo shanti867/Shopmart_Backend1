@@ -20,6 +20,7 @@ public class ProductRequest {
     private int stockQuantity;
     private String description;
     private MultipartFile[] pic;
+    private String oldPic;
     private Boolean status;
 
 
