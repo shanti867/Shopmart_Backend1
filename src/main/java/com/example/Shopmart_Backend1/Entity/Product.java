@@ -42,7 +42,7 @@ public class Product {
     private int stockQuantity;
 
     @Lob
-    private  String Description;
+    private  String description;
 
     @ElementCollection
     private List<String> pic;
