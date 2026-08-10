@@ -1,8 +1,12 @@
 package com.example.Shopmart_Backend1.Service;
 
 
+import com.example.Shopmart_Backend1.Dto.ProductImportRequest;
 import com.example.Shopmart_Backend1.Dto.ProductRequest;
+import com.example.Shopmart_Backend1.Entity.Brand;
+import com.example.Shopmart_Backend1.Entity.MainCategory;
 import com.example.Shopmart_Backend1.Entity.Product;
+import com.example.Shopmart_Backend1.Entity.SubCategory;
 import com.example.Shopmart_Backend1.Repository.BrandRepository;
 import com.example.Shopmart_Backend1.Repository.MainCategoryRepository;
 import com.example.Shopmart_Backend1.Repository.ProductRepository;
@@ -64,7 +68,7 @@ public class ProductServiceImpl implements ProductService{
             directory.mkdirs();
         }
         for(MultipartFile file: request.getPic()){
-            String fileName = System.currentTimeMillis()+"_"+file.getOriginalFilename();
+            String fileName = file.getOriginalFilename();
             File destination = new File(directory, fileName);
             file.transferTo(destination);
             images.add(fileName);
@@ -121,7 +125,7 @@ public class ProductServiceImpl implements ProductService{
             if (request.getPic() != null) {
                 for (MultipartFile file : request.getPic()) {
                     if (!file.isEmpty()) {
-                        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+                        String fileName =  file.getOriginalFilename();
                         File destination = new File(directory , fileName);
                         file.transferTo(destination);
                         images.add(fileName);
@@ -132,9 +136,99 @@ public class ProductServiceImpl implements ProductService{
             product.setStatus(request.getStatus());
             return productRepo.save(product);
         }
-    public void delete(Long id){
+    public void delete(Long id)throws Exception{
 
-        productRepo.deleteById(id);
+        Product product = productRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        String uploadDir = System.getProperty("user.dir")
+                + File.separator
+                + "uploads"
+                + File.separator
+                + "product";
+
+        List<String> images = product.getPic();
+
+        if (images != null) {
+            for (String image : images) {
+
+                Path path = Paths.get(
+                        uploadDir + File.separator + image
+                );
+
+                Files.deleteIfExists(path);
+            }
+        }
+
+        productRepo.delete(product);
+    }
+
+    public Product importProduct(ProductImportRequest request) throws Exception {
+
+        Product product = new Product();
+
+        product.setName(request.getName());
+
+        MainCategory mainCategory =
+                maincategoryRepo.findByName(request.getMaincategory());
+
+        if (mainCategory == null) {
+            throw new RuntimeException(
+                    "Main Category not found: " + request.getMaincategory()
+            );
+        }
+
+        product.setMaincategory(mainCategory);
+
+
+        SubCategory subCategory =
+                subcategoryRepo.findByName(request.getSubcategory());
+
+        if (subCategory == null) {
+            throw new RuntimeException(
+                    "Sub Category not found: " + request.getSubcategory()
+            );
+        }
+
+        product.setSubcategory(subCategory);
+
+
+        Brand brand =
+                brandRepo.findByName(request.getBrand());
+
+        if (brand == null) {
+            throw new RuntimeException(
+                    "Brand not found: " + request.getBrand()
+            );
+        }
+
+        product.setBrand(brand);
+
+
+        product.setColor(request.getColor());
+        product.setSize(request.getSize());
+
+        product.setBasePrice(request.getBasePrice());
+        product.setDiscount(request.getDiscount());
+        product.setFinalPrice(request.getFinalPrice());
+
+        product.setStock(request.getStock());
+        product.setStockQuantity(request.getStockQuantity());
+
+        product.setDescription(request.getDescription());
+
+        product.setPic(request.getPic());
+
+        product.setStatus(request.getStatus());
+
+
+        Product savedProduct = productRepo.save(product);
+
+        savedProduct.setProductId(
+                "PRD" + String.format("%03d", savedProduct.getId())
+        );
+
+        return productRepo.save(savedProduct);
     }
 
 }

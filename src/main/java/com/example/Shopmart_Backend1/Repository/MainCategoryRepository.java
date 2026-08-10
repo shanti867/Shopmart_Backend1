@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface MainCategoryRepository extends JpaRepository<MainCategory, Long> {
     List<MainCategory> findByStatusTrue();
+    MainCategory findByName(String name);
 }

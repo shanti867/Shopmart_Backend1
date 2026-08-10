@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface BrandRepository extends JpaRepository<Brand, Long> {
     List<Brand> findByStatusTrue();
+    Brand findByName(String name);
 }

@@ -1,5 +1,6 @@
 package com.example.Shopmart_Backend1.Controller;
 
+import com.example.Shopmart_Backend1.Dto.ProductImportRequest;
 import com.example.Shopmart_Backend1.Dto.ProductRequest;
 import com.example.Shopmart_Backend1.Entity.Product;
 import com.example.Shopmart_Backend1.Service.ProductService;
@@ -29,7 +30,14 @@ public class ProductController {
         return service.update(id, request);
     }
     @DeleteMapping("/{id}")
-    public void deleteproduct(@PathVariable Long id){
+    public void deleteproduct(@PathVariable Long id)throws Exception
+    {
         service.delete(id);
+    }
+    @PostMapping("/import")
+    public Product importProduct(
+            @RequestBody ProductImportRequest request) throws Exception {
+
+        return service.importProduct(request);
     }
 }

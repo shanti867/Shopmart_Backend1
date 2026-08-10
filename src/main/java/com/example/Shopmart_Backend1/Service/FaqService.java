@@ -16,7 +16,6 @@ public class FaqService {
         Faq savedFaq = repository.save(faq);
         savedFaq.setFaqId("FTR" + String.format("%3d", savedFaq.getId()));
 
-//        savedFaq.setFaqId("FQ"+String.format("%3d", savedFaq.getFaqId()));
         return repository.save(savedFaq);
     }
     public List<Faq> getAll(){
@@ -31,11 +30,13 @@ public class FaqService {
             oldFaq.setAnswer(faq.getAnswer());
         }
         if(faq.getQuestion() != null && !faq.getQuestion().trim().isEmpty()){
-            oldFaq.setQuestion(faq.getAnswer());
+            oldFaq.setQuestion(faq.getQuestion());
         }
         if(faq.getStatus() != null){
             oldFaq.setStatus(faq.getStatus());
         }
+        System.out.println("Question = " + faq.getQuestion());
+        System.out.println("Question Length = " + faq.getQuestion().length());
         return repository.save(oldFaq);
     }
 }
