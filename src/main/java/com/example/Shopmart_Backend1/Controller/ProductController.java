@@ -37,7 +37,6 @@ public class ProductController {
     @PostMapping("/import")
     public Product importProduct(
             @RequestBody ProductImportRequest request) throws Exception {
-
         return service.importProduct(request);
     }
 }

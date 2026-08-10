@@ -34,18 +34,25 @@ public class MainCategoryService {
         savedCategory.setMainCategoryId("MC" + String.format("%03d", savedCategory.getId()));
         // Save again
         return repository.save(savedCategory);
-
     }
     public List<MainCategory> getAll() {
-
         return repository.findAll();
     }
     public List<MainCategory> getActive(){
         return repository.findByStatusTrue();
     }
     // Delete
-    public void delete(Long id) {
+    public void delete(Long id)throws Exception{
+        MainCategory maincategory = repository.findById(id).orElseThrow();
+        String imageName = maincategory.getPic();
+        if(imageName != null && !imageName.isEmpty()){
+            File uploadFolder = new File(System.getProperty(("user.dir"),"uploads/maincategory"));
 
+            File imageFile = new File(uploadFolder,imageName);
+            if(uploadFolder.exists()){
+                imageFile.delete();
+            }
+        }
         repository.deleteById(id);
     }
     public MainCategory update(Long id, String name, MultipartFile pic, Boolean status) throws Exception {

@@ -2,6 +2,7 @@ package com.example.Shopmart_Backend1.Service;
 
 import com.example.Shopmart_Backend1.Entity.Brand;
 
+import com.example.Shopmart_Backend1.Entity.MainCategory;
 import com.example.Shopmart_Backend1.Repository.BrandRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,9 +39,19 @@ public class BrandService {
         return repository.findAll();
     }
     public List<Brand> getActive(){
+
         return repository.findByStatusTrue();
     }
-    public void delete(Long id){
+    public void delete(Long id)throws Exception{
+        Brand brand = repository.findById(id).orElseThrow();
+        String imageName = brand.getPic();
+        if(imageName != null && !imageName.isEmpty()){
+            File uploadFolder = new File(System.getProperty(("user.dir"),"uploads/brand"));
+            File imageFile = new File(uploadFolder,imageName);
+            if(uploadFolder.exists()){
+                imageFile.delete();
+            }
+        }
         repository.deleteById(id);
     }
     public Brand updateBrand(Long id, String name, MultipartFile pic, Boolean status)throws Exception{

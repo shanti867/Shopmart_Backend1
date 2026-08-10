@@ -35,8 +35,7 @@ public class MainCategoryController {
         return service.getActive();
     }
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-
+    public void delete(@PathVariable Long id)throws Exception{
         service.delete(id);
     }
     @PutMapping("/{id}")

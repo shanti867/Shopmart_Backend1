@@ -164,71 +164,46 @@ public class ProductServiceImpl implements ProductService{
     }
 
     public Product importProduct(ProductImportRequest request) throws Exception {
-
         Product product = new Product();
-
         product.setName(request.getName());
-
         MainCategory mainCategory =
                 maincategoryRepo.findByName(request.getMaincategory());
-
         if (mainCategory == null) {
             throw new RuntimeException(
                     "Main Category not found: " + request.getMaincategory()
             );
         }
-
         product.setMaincategory(mainCategory);
-
-
         SubCategory subCategory =
                 subcategoryRepo.findByName(request.getSubcategory());
-
         if (subCategory == null) {
             throw new RuntimeException(
                     "Sub Category not found: " + request.getSubcategory()
             );
         }
-
         product.setSubcategory(subCategory);
-
-
         Brand brand =
                 brandRepo.findByName(request.getBrand());
-
         if (brand == null) {
             throw new RuntimeException(
                     "Brand not found: " + request.getBrand()
             );
         }
-
         product.setBrand(brand);
-
-
         product.setColor(request.getColor());
         product.setSize(request.getSize());
-
         product.setBasePrice(request.getBasePrice());
         product.setDiscount(request.getDiscount());
         product.setFinalPrice(request.getFinalPrice());
-
         product.setStock(request.getStock());
         product.setStockQuantity(request.getStockQuantity());
-
         product.setDescription(request.getDescription());
-
         product.setPic(request.getPic());
-
         product.setStatus(request.getStatus());
-
-
         Product savedProduct = productRepo.save(product);
-
         savedProduct.setProductId(
                 "PRD" + String.format("%03d", savedProduct.getId())
         );
-
         return productRepo.save(savedProduct);
     }
-
 }

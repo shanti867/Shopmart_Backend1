@@ -1,5 +1,6 @@
 package com.example.Shopmart_Backend1.Service;
 
+import com.example.Shopmart_Backend1.Entity.MainCategory;
 import com.example.Shopmart_Backend1.Entity.SubCategory;
 import com.example.Shopmart_Backend1.Repository.SubCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,17 @@ public class SubCategoryService {
     public List<SubCategory> getActive(){
         return repository.findByStatusTrue();
     }
-    public void delete(Long id){
+    public void delete(Long id)throws Exception{
+        SubCategory subcategory = repository.findById(id).orElseThrow();
+        String imageName = subcategory.getPic();
+        if(imageName != null && !imageName.isEmpty()){
+            File uploadFolder = new File(System.getProperty(("user.dir"),"uploads/subcategory"));
+
+            File imageFile = new File(uploadFolder,imageName);
+            if(uploadFolder.exists()){
+                imageFile.delete();
+            }
+        }
         repository.deleteById(id);
     }
     public SubCategory update(Long id, String name, MultipartFile pic, Boolean status)throws Exception{
