@@ -56,7 +56,6 @@ public class BrandService {
     }
     public Brand updateBrand(Long id, String name, MultipartFile pic, Boolean status)throws Exception{
         Brand brand = repository.findById(id).orElseThrow();
-
         if(name != null && !name.trim().isEmpty()){
             brand.setName(name);
         }
