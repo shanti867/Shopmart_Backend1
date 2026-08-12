@@ -38,6 +38,7 @@ public class SubCategoryService {
         return repository.findAll();
     }
     public List<SubCategory> getActive(){
+
         return repository.findByStatusTrue();
     }
     public void delete(Long id)throws Exception{

@@ -206,4 +206,8 @@ public class ProductServiceImpl implements ProductService{
         );
         return productRepo.save(savedProduct);
     }
+    public List<Product> getActive(){
+
+        return productRepo.findByStatusTrue();
+    }
 }

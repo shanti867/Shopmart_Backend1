@@ -2,6 +2,7 @@ package com.example.Shopmart_Backend1.Controller;
 
 import com.example.Shopmart_Backend1.Dto.ProductImportRequest;
 import com.example.Shopmart_Backend1.Dto.ProductRequest;
+import com.example.Shopmart_Backend1.Entity.MainCategory;
 import com.example.Shopmart_Backend1.Entity.Product;
 import com.example.Shopmart_Backend1.Service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +39,9 @@ public class ProductController {
     public Product importProduct(
             @RequestBody ProductImportRequest request) throws Exception {
         return service.importProduct(request);
+    }
+    @GetMapping("/active")
+    public List<Product> getActiveProduct(){
+        return service.getActive();
     }
 }
