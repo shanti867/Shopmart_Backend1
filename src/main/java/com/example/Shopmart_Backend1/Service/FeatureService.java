@@ -46,5 +46,8 @@ public class FeatureService {
 
         return repository.save(oldFeature);
     }
+    public List<Feature> getActive(){
+        return repository.findByStatusTrue();
+    }
 
 }

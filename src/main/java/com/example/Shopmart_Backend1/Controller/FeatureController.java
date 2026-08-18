@@ -20,6 +20,7 @@ public class FeatureController {
     }
     @GetMapping
     public List<Feature> getAll(){
+
         return service.getAll();
     }
     @DeleteMapping("/{id}")
@@ -29,5 +30,10 @@ public class FeatureController {
     @PutMapping("/{id}")
     public Feature update(@PathVariable Long id, @RequestBody Feature feature)throws Exception{
         return service.update(id, feature);
+    }
+
+    @GetMapping("/active")
+    public List<Feature> getActiveFeature(){
+        return service.getActive();
     }
 }

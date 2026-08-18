@@ -1,6 +1,7 @@
 package com.example.Shopmart_Backend1.Controller;
 
 import com.example.Shopmart_Backend1.Entity.Faq;
+import com.example.Shopmart_Backend1.Entity.Feature;
 import com.example.Shopmart_Backend1.Service.FaqService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,11 @@ public class FaqController {
     @GetMapping
     public List<Faq> getAll(){
         return service.getAll();
+    }
+
+    @GetMapping("/active")
+    public List<Faq> getActiveFaq(){
+        return service.getActive();
     }
 
     @DeleteMapping("/{id}")

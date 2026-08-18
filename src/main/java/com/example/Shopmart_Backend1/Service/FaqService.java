@@ -1,6 +1,7 @@
 package com.example.Shopmart_Backend1.Service;
 
 import com.example.Shopmart_Backend1.Entity.Faq;
+import com.example.Shopmart_Backend1.Entity.Feature;
 import com.example.Shopmart_Backend1.Repository.FaqRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,9 @@ public class FaqService {
     }
     public List<Faq> getAll(){
         return repository.findAll();
+    }
+    public List<Faq> getActive(){
+        return repository.findByStatusTrue();
     }
     public void delete(Long id){
         repository.deleteById(id);
