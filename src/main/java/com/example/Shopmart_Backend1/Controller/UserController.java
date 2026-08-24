@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
@@ -28,7 +29,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public User loginUser(@RequestBody User user){
+    public Map<String,Object> loginUser(@RequestBody User user){
+
         return userService.loginUser(user);
     }
 }

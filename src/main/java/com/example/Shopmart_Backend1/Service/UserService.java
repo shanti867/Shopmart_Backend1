@@ -6,12 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private JwtService jwtService;
 
     public User saveUser(User user){
         if(userRepository.existsByUsernameIgnoreCase(user.getUsername())){
@@ -29,16 +33,19 @@ public class UserService {
     public List<User> getAll(){
         return userRepository.findAll();
     }
-    public User loginUser(User user){
+    public Map<String,Object> loginUser (User user){
         User dbUser = userRepository.findByUsernameIgnoreCase(user.getUsername()).orElse(null);
         if(dbUser == null){
-            dbUser = userRepository.findByEmailIgnoreCase(user.getEmail()).orElse(null);
+            dbUser = userRepository.findByEmailIgnoreCase(user.getUsername()).orElse(null);
         }
         if(dbUser == null){
             throw new RuntimeException("Invalid Username or Password");
         }
         if(!dbUser.isStatus()){
-            return dbUser;
+            return Map.of(
+                    "status",false,
+                    "message", "Account is blocked"
+            );
         }
         if(!dbUser.getPassword().equals(user.getPassword())){
             dbUser.setFailedLoginAttempts(dbUser.getFailedLoginAttempts()+1);
@@ -46,13 +53,24 @@ public class UserService {
             if(dbUser.getFailedLoginAttempts() >=5){
                 dbUser.setStatus(false);
                 userRepository.save(dbUser);
-                return dbUser;
+                return Map.of(
+                        "status",false,
+                        "message", "Account is blocked"
+                );
             }
             userRepository.save(dbUser);
             throw new RuntimeException("Invalid Username or Password");
         }
         dbUser.setFailedLoginAttempts(0);
         userRepository.save(dbUser);
-        return dbUser;
+
+        String token = jwtService.generateToken(
+                dbUser.getUsername()
+        );
+        return Map.of(
+                "status",true,
+                "data", dbUser,
+                "token", token
+        );
     }
 }
