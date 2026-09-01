@@ -28,4 +28,12 @@ public class JwtService {
                 .signWith(getKey())
                 .compact();
     }
+    public String extractUsername(String token){
+        return Jwts.parser()
+                .verifyWith(getKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getSubject();
+    }
 }

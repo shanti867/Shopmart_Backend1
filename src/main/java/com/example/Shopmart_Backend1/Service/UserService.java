@@ -73,4 +73,60 @@ public class UserService {
                 "token", token
         );
     }
+    public Map<String, Object> getProfile(String username){
+        User dbUser = userRepository.findByUsernameIgnoreCase(username).orElse(null);
+
+        if(dbUser == null){
+            return Map.of(
+                    "status", false,
+                    "message", "user not found"
+            );
+        }
+        return Map.of(
+                "status", true,
+                "data",dbUser
+        );
+    }
+    public Map<String, Object> updateProfile(String loggedInUsername, User user){
+        User dbUser = userRepository.findByUsernameIgnoreCase(loggedInUsername).orElse(null);
+
+        if(dbUser == null){
+            return Map.of(
+                    "status",false,
+                     "message", "user not found"
+            );
+        }
+        if(!dbUser.getUsername().equalsIgnoreCase(user.getUsername())){
+            if(userRepository.existsByUsernameIgnoreCase((user.getUsername()))){
+                return Map.of(
+                        "status",false,
+                        "message", "username already Taken"
+                );
+            }
+            dbUser.setUsername(user.getUsername());
+        }
+        if(!dbUser.getEmail().equalsIgnoreCase(user.getEmail())){
+            if(userRepository.existsByEmailIgnoreCase(user.getEmail())){
+                return Map.of(
+                        "status", false,
+                        "message", "email already Taken"
+                );
+            }
+            dbUser.setEmail(user.getEmail());
+        }
+        dbUser.setName(user.getName());
+        dbUser.setPhone(user.getPhone());
+
+        User updatedUser = userRepository.save(dbUser);
+
+        String newToken = jwtService.generateToken(
+                updatedUser.getUsername()
+        );
+        return Map.of(
+                "status", true,
+                "message", "Profile Updated Successfully",
+                "data", updatedUser,
+                "token", newToken
+        );
+    }
 }
