@@ -25,7 +25,8 @@ public class CartService {
     @Autowired
     private ProductRepository productRepository;
 
-    public Map<String, Object> createCart(String loggedInUsername, Cart cart){
+    public Map<String, Object> createCart(String loggedInUsername, CartDTO cartDTO){
+
         User user = userRepository
                 .findByUsernameIgnoreCase(loggedInUsername)
                 .orElse(null);
@@ -37,7 +38,7 @@ public class CartService {
             );
         }
 
-        if(cart.getProduct() == null || cart.getProduct().getId() == null){
+        if(cartDTO.getProductId() == null){
             return Map.of(
                     "status", false,
                     "message", "Product is required"
@@ -45,7 +46,7 @@ public class CartService {
         }
 
         Product product = productRepository
-                .findById(cart.getProduct().getId())
+                .findById(cartDTO.getProductId())
                 .orElse(null);
 
         if(product == null){
@@ -55,25 +56,37 @@ public class CartService {
             );
         }
 
-        Optional<Cart> existingCart = cartRepository.findByUserAndProduct(user, product);
+        Optional<Cart> existingCart =
+                cartRepository.findByUserAndProduct(user, product);
+
         if(existingCart.isPresent()){
             return Map.of(
                     "status", false,
                     "message", "Product Already Added To Cart"
             );
         }
+
+        Cart cart = new Cart();
+
         cart.setUser(user);
         cart.setProduct(product);
+        cart.setQuantity(cartDTO.getQuantity());
+        cart.setColor(cartDTO.getSelectedColor());
+        cart.setSize(cartDTO.getSelectedSize());
+
+        System.out.println("Total received from frontend: " + cartDTO.getTotal());
+
+        cart.setTotal(cartDTO.getTotal());
         Cart savedCart = cartRepository.save(cart);
 
         CartDTO dto = convertToDTO(savedCart);
+
         return Map.of(
                 "status", true,
                 "message", "Product Added To Cart",
                 "data", dto
         );
     }
-
     public Map<String,Object> getCart(String loggedInUsername){
         User user = userRepository.findByUsernameIgnoreCase(loggedInUsername)
                 .orElse(null);
@@ -129,11 +142,22 @@ public class CartService {
         dto.setId(cart.getId());
         dto.setProductId(product.getId());
         dto.setName(product.getName());
+        dto.setPic(product.getPic().toArray(new String[0]));
+        if(product.getBrand() != null){
+            dto.setBrand(product.getBrand().getName());
+        }
+
         dto.setStockQuantity(product.getStockQuantity());
         dto.setPrice(product.getFinalPrice());
         dto.setQuantity(cart.getQuantity());
+
+        dto.setColor(product.getColor().toArray(new String[0]));
+        dto.setSize(product.getSize().toArray(new String[0]));
+
         dto.setSelectedColor(cart.getColor());
         dto.setSelectedSize(cart.getSize());
+//        dto.setTotal(cart.getTotal());
+        dto.setTotal(cart.getQuantity() * product.getFinalPrice());
         return dto;
     }
 }

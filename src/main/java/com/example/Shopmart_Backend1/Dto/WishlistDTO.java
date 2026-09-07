@@ -11,7 +11,7 @@ public class WishlistDTO {
     private String[] pic;
     private String[] color;
     private String[] size;
-    private Integer stockQuantity;
-    private Double price;
+    private int stockQuantity;
+    private int price;
 
 }

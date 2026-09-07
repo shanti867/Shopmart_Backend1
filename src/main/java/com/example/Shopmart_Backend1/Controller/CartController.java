@@ -1,5 +1,6 @@
 package com.example.Shopmart_Backend1.Controller;
 
+import com.example.Shopmart_Backend1.Dto.CartDTO;
 import com.example.Shopmart_Backend1.Entity.Cart;
 import com.example.Shopmart_Backend1.Service.CartService;
 import com.example.Shopmart_Backend1.Service.JwtService;
@@ -21,10 +22,10 @@ public class CartController {
     @PostMapping("/cart")
     public Map<String,Object> createCart(
             @RequestHeader("Authorization") String authorization,
-            @RequestBody Cart cart){
+            @RequestBody CartDTO cartDTO){
         String token = authorization.substring(7);
         String username = jwtService.extractUsername(token);
-        return cartService.createCart(username, cart);
+        return cartService.createCart(username, cartDTO);
     }
 
     @GetMapping("/cart")

@@ -14,7 +14,7 @@ public class Cart {
     private Integer quantity;
     private String color;
     private String size;
-
+    private Integer total;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
