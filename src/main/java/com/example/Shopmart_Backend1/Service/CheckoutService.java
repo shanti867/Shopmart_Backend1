@@ -10,6 +10,7 @@ import com.example.Shopmart_Backend1.Repository.CheckoutRepository;
 import com.example.Shopmart_Backend1.Repository.ProductRepository;
 import com.example.Shopmart_Backend1.Repository.UserRepository;
 //import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class CheckoutService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     @Transactional
     public Checkout createCheckout(CheckoutDTO data, String username){
@@ -75,11 +79,25 @@ public class CheckoutService {
             checkout.setPaymentMode(data.getPaymentMode());
             checkout.setPaymentStatus(data.getPaymentStatus());
             checkout.setSubtotal(data.getSubtotal());
+            checkout.setShipping(data.getShipping());
             checkout.setTotal(data.getTotal());
             checkout.setDate(data.getDate());
             checkout.setProducts(objectMapper.writeValueAsString(data.getProducts()));
             Checkout savedCheckout = checkoutRepository.save(checkout);
 
+            String customerEmail = null;
+            JsonNode addressNode = objectMapper.valueToTree(data.getDeliveryAddress());
+            if(addressNode.has("email")){
+                customerEmail = addressNode.get("email").asText();
+            }
+            if(customerEmail != null && !customerEmail.isBlank()){
+                try{
+                    emailService.sendOrderConfirmationEmail(customerEmail,savedCheckout.getId(),savedCheckout.getTotal());
+                }
+                catch(Exception e){
+                    System.out.println("Order saved but  email could not be sent:"+e.getMessage());
+                }
+            }
             for(Cart cart: cartList){
                 cartRepository.deleteById(cart.getId());
             }
@@ -95,10 +113,10 @@ public class CheckoutService {
     public List<Checkout> getUserCheckout(String user){
         return checkoutRepository.findByUser(user);
     }
-    public Optional<Checkout> getCheckout(int id){
+    public Optional<Checkout> getCheckout(Long id){
         return checkoutRepository.findById(id);
     }
-    public void deleteCheckout(int id){
+    public void deleteCheckout(Long id){
         checkoutRepository.deleteById(id);
     }
 }

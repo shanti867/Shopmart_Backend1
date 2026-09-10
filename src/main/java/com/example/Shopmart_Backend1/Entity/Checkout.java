@@ -10,7 +10,7 @@ import java.util.Date;
 public class Checkout {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     private String user;
 
@@ -21,6 +21,7 @@ public class Checkout {
     private String paymentMode;
     private String paymentStatus;
     private double subtotal;
+    private double shipping;
     private double total;
 
     @Temporal(TemporalType.TIMESTAMP)

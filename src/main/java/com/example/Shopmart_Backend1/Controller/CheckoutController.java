@@ -38,11 +38,11 @@ public class CheckoutController {
         return checkoutService.getUserCheckout(user);
     }
     @GetMapping("/{id}")
-    public Optional<Checkout> getCheckout(@PathVariable int id){
+    public Optional<Checkout> getCheckout(@PathVariable Long id){
         return checkoutService.getCheckout(id);
     }
     @DeleteMapping("/{id}")
-    public void deleteCheckout(@PathVariable int id){
+    public void deleteCheckout(@PathVariable Long id){
         checkoutService.deleteCheckout(id);
     }
 

@@ -12,6 +12,7 @@ public class CheckoutDTO {
     private String paymentMode;
     private String paymentStatus;
     private double subtotal;
+    private double shipping;
     private double total;
     private Date date;
     private Object products;

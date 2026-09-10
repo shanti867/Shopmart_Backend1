@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CheckoutRepository extends JpaRepository<Checkout, Integer> {
+public interface CheckoutRepository extends JpaRepository<Checkout, Long> {
     List<Checkout> findByUser(String user);
 }
