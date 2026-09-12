@@ -10,6 +10,7 @@ public class Newsletter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String newsletterId;
     @Column(unique = true, nullable = false)
     private String email;
 

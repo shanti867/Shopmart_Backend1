@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/newsletter")
@@ -26,5 +27,19 @@ public class NewsletterController{
     @GetMapping("/{id}")
     public Newsletter getNewsletterById(@PathVariable Long id){
         return newsletterService.getNewsletterById(id);
+    }
+    @PutMapping("/{id}/status")
+    public Newsletter updateNewsletterStatus(
+            @PathVariable Long id,
+            @RequestBody Map<String, Boolean> request){
+
+        boolean status = request.get("status");
+
+        return newsletterService.updateNewsletterStatus(id, status);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id){
+        newsletterService.deleteNewsletter(id);
     }
 }
