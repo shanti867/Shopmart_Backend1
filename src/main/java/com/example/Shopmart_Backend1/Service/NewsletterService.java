@@ -40,6 +40,7 @@ public class NewsletterService {
         return newsletterRepository.save(newsletter);
     }
     public void deleteNewsletter(Long id){
+
         newsletterRepository.deleteById(id);
     }
 

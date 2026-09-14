@@ -12,6 +12,7 @@ public class Checkout {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String checkoutId;
     private String user;
 
     @Column(columnDefinition="LONGTEXT")

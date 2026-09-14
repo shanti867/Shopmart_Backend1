@@ -84,6 +84,8 @@ public class CheckoutService {
             checkout.setDate(data.getDate());
             checkout.setProducts(objectMapper.writeValueAsString(data.getProducts()));
             Checkout savedCheckout = checkoutRepository.save(checkout);
+            savedCheckout.setCheckoutId("CHK"+ String.format("%03d",savedCheckout.getId()));
+            checkoutRepository.save(savedCheckout);
 
             String customerEmail = null;
             JsonNode addressNode = objectMapper.valueToTree(data.getDeliveryAddress());
