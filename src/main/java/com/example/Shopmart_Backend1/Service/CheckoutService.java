@@ -110,7 +110,16 @@ public class CheckoutService {
         }
     }
     public List<Checkout> getAllCheckout(){
+
         return checkoutRepository.findAll();
+    }
+    public Checkout updateCheckout(Long id, CheckoutDTO data){
+        Checkout checkout = checkoutRepository.findById(id)
+                .orElseThrow();
+        checkout.setOrderStatus(data.getOrderStatus());
+        checkout.setPaymentStatus(data.getPaymentStatus());
+
+        return checkoutRepository.save(checkout);
     }
     public List<Checkout> getUserCheckout(String user){
         return checkoutRepository.findByUser(user);
@@ -118,6 +127,7 @@ public class CheckoutService {
     public Optional<Checkout> getCheckout(Long id){
         return checkoutRepository.findById(id);
     }
+
     public void deleteCheckout(Long id){
         checkoutRepository.deleteById(id);
     }

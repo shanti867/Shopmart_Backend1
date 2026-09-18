@@ -34,9 +34,7 @@ public class NewsletterService {
 
         Newsletter newsletter = newsletterRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Newsletter Not Found"));
-
         newsletter.setStatus(status);
-
         return newsletterRepository.save(newsletter);
     }
     public void deleteNewsletter(Long id){

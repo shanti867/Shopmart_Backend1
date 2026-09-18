@@ -129,4 +129,10 @@ public class UserService {
                 "token", newToken
         );
     }
+
+    public User updateStatus(Long id, boolean status){
+        User user = userRepository.findById(id).orElseThrow();
+        user.setStatus(status);
+        return userRepository.save(user);
+    }
 }

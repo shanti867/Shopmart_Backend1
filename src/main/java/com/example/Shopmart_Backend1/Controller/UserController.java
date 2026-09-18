@@ -59,6 +59,7 @@ public class UserController {
 
     }
 
+
     @GetMapping("/profile")
     public Map<String,Object> getProfile(@RequestHeader("Authorization") String authorization){
         if(authorization == null || !authorization.startsWith("Bearer ")){

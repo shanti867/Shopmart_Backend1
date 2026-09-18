@@ -33,6 +33,10 @@ public class CheckoutController {
         return checkoutService.getAllCheckout();
     }
 
+    @PutMapping("/{id}")
+    public Checkout updateCheckout(@PathVariable Long id, @RequestBody CheckoutDTO data){
+        return checkoutService.updateCheckout(id,data);
+    }
     @GetMapping("/user/{user}")
     public List<Checkout> getUserCheckout(@PathVariable String user){
         return checkoutService.getUserCheckout(user);
