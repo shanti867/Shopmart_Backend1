@@ -121,14 +121,26 @@ public class CheckoutService {
 
         return checkoutRepository.save(checkout);
     }
-    public List<Checkout> getUserCheckout(String user){
-        return checkoutRepository.findByUser(user);
-    }
-    public Optional<Checkout> getCheckout(Long id){
-        return checkoutRepository.findById(id);
-    }
+//    public List<Checkout> getUserCheckout(String user){
+//        return checkoutRepository.findByUser(user);
+//    }
+//    public Optional<Checkout> getCheckout(Long id){
+//        return checkoutRepository.findById(id);
+//    }
 
-    public void deleteCheckout(Long id){
-        checkoutRepository.deleteById(id);
+//    public void deleteCheckout(Long id){
+//        checkoutRepository.deleteById(id);
+//
+//    }
+    public List<Checkout> getCheckoutByRole(String username){
+        User user = userRepository.findByUsernameIgnoreCase(username).orElseThrow();
+
+        if("Buyer".equalsIgnoreCase(user.getRole())){
+            return checkoutRepository.findByUser(username);
+        }
+        else if("Admin".equalsIgnoreCase(user.getRole()) || "Super Admin".equalsIgnoreCase(user.getRole())){
+            return checkoutRepository.findAll();
+        }
+        throw new RuntimeException("Unauthorized");
     }
 }

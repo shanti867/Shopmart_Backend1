@@ -28,26 +28,35 @@ public class CheckoutController {
         return checkoutService.createCheckout(data, username);
     }
 
+//    @GetMapping
+//    public List<Checkout> getAllCheckout(){
+//        return checkoutService.getAllCheckout();
+//    }
+
     @GetMapping
-    public List<Checkout> getAllCheckout(){
-        return checkoutService.getAllCheckout();
+    public List<Checkout> getCheckout(@RequestHeader("Authorization") String authorization){
+        String token = authorization.substring(7);
+        String username = jwtService.extractUsername(token);
+
+        return checkoutService.getCheckoutByRole(username);
     }
 
     @PutMapping("/{id}")
     public Checkout updateCheckout(@PathVariable Long id, @RequestBody CheckoutDTO data){
         return checkoutService.updateCheckout(id,data);
     }
-    @GetMapping("/user/{user}")
-    public List<Checkout> getUserCheckout(@PathVariable String user){
-        return checkoutService.getUserCheckout(user);
-    }
-    @GetMapping("/{id}")
-    public Optional<Checkout> getCheckout(@PathVariable Long id){
-        return checkoutService.getCheckout(id);
-    }
-    @DeleteMapping("/{id}")
-    public void deleteCheckout(@PathVariable Long id){
-        checkoutService.deleteCheckout(id);
-    }
+//    @GetMapping("/user/{user}")
+//    public List<Checkout> getUserCheckout(@PathVariable String user){
+//
+//        return checkoutService.getUserCheckout(user);
+//    }
+//    @GetMapping("/{id}")
+//    public Optional<Checkout> getCheckout(@PathVariable Long id){
+//        return checkoutService.getCheckout(id);
+//    }
+//    @DeleteMapping("/{id}")
+//    public void deleteCheckout(@PathVariable Long id){
+//        checkoutService.deleteCheckout(id);
+//    }
 
 }

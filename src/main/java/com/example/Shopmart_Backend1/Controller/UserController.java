@@ -1,6 +1,7 @@
 package com.example.Shopmart_Backend1.Controller;
 
 
+import com.example.Shopmart_Backend1.Entity.Newsletter;
 import com.example.Shopmart_Backend1.Entity.User;
 import com.example.Shopmart_Backend1.Service.JwtService;
 import com.example.Shopmart_Backend1.Service.UserService;
@@ -59,7 +60,20 @@ public class UserController {
 
     }
 
+    @PutMapping("/{id}/status")
+    public User updateUserStatus(
+            @PathVariable Long id,
+            @RequestBody Map<String, Boolean> request){
 
+        boolean status = request.get("status");
+        return userService.updateStatus(id, status);
+    }
+
+    @PutMapping("/{id}")
+    public Map<String, Object> updateUser(
+            @PathVariable Long id, @RequestBody User user){
+        return userService.updateUser(id,user);
+    }
     @GetMapping("/profile")
     public Map<String,Object> getProfile(@RequestHeader("Authorization") String authorization){
         if(authorization == null || !authorization.startsWith("Bearer ")){

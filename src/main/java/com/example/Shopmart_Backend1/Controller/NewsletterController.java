@@ -34,7 +34,6 @@ public class NewsletterController{
             @RequestBody Map<String, Boolean> request){
 
         boolean status = request.get("status");
-
         return newsletterService.updateNewsletterStatus(id, status);
     }
 

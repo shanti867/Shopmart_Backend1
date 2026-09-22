@@ -27,7 +27,10 @@ public class UserService {
         if(!user.getPassword().equals(user.getCpassword())){
             throw new RuntimeException("Password and Confirm Password do not match");
         }
-        return userRepository.save(user);
+
+        User savedUser = userRepository.save(user);
+        savedUser.setUserId("USR"+String.format("%03d",savedUser.getId()));
+        return userRepository.save(savedUser);
     }
 
     public List<User> getAll(){
@@ -134,5 +137,47 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow();
         user.setStatus(status);
         return userRepository.save(user);
+    }
+
+   public Map<String, Object> updateUser(Long id, User user){
+        User dbUser = userRepository.findById(id).orElse(null);
+
+        if(dbUser == null){
+            return Map.of(
+                    "status",false,
+                    "message","User not found"
+            );
+        }
+        if(!dbUser.getUsername().equalsIgnoreCase(user.getUsername())){
+            if(userRepository.existsByUsernameIgnoreCase(user.getUsername())){
+                return Map.of(
+                        "status",false,
+                        "message", "Username Already Taken"
+                );
+            }
+            dbUser.setUsername(user.getUsername());
+        }
+       if(!dbUser.getEmail().equalsIgnoreCase(user.getEmail())){
+           if(userRepository.existsByEmailIgnoreCase(user.getEmail())){
+               return Map.of(
+                       "status",false,
+                       "message", "Email Already Taken"
+               );
+           }
+           dbUser.setEmail(user.getEmail());
+       }
+       dbUser.setName(user.getName());
+       dbUser.setPhone(user.getPhone());
+       dbUser.setRole(user.getRole());
+       dbUser.setStatus(user.isStatus());
+
+       User updatedUser = userRepository.save(dbUser);
+
+       return Map.of(
+               "status",true,
+               "message","User Updated Successfully",
+               "data", updatedUser
+       );
+
     }
 }
