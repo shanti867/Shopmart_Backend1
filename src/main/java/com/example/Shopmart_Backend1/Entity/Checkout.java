@@ -21,6 +21,9 @@ public class Checkout {
     private String orderStatus;
     private String paymentMode;
     private String paymentStatus;
+
+    private String razorpayOrderId;
+    private String razorpayPaymentId;
     private double subtotal;
     private double shipping;
     private double total;
